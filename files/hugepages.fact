@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+hugepages_total=`grep HugePages_Total /proc/meminfo`
+hugepages_free=`grep HugePages_Free /proc/meminfo`
+hugepages_rsvd=`grep HugePages_Rsvd /proc/meminfo`
+hugepages_surp=`grep HugePages_Surp /proc/meminfo`
+
+# remove spaces and quote words
+echo "{"
+echo \" $hugepages_total \", | sed 's/:/\":\"/' | tr -d ' '
+echo \" $hugepages_free \", | sed 's/:/\":\"/' | tr -d ' '
+echo \" $hugepages_rsvd \", | sed 's/:/\":\"/' | tr -d ' '
+echo \" $hugepages_surp \" | sed 's/:/\":\"/' | tr -d ' '
+echo "}"

@@ -1,0 +1,36 @@
+---
+# first lets make sure our custom fact is installed on all computes, we don't need to waste time gathering facts here
+- hosts: compute
+  gather_facts: no
+  become: yes
+  tasks:
+
+  - name: ensure custom facts directory exists
+    file:
+      path: /etc/ansible/facts.d
+      recurse: yes
+      state: directory
+
+  - name: install custom fact module for hugepages
+    copy:
+      src: hugepages.fact
+      dest: /etc/ansible/facts.d/hugepages.fact
+      mode: 0755
+
+
+# now lets create another play to fetch our facts, limited to just this new module
+
+- hosts: compute
+  tasks:
+
+# lets look at our custom facts on all hosts
+  - name: output our custom facts
+    debug:
+      var: ansible_local.hugepages
+
+# now lets use our facts to determine what we output
+# here we say only show me hosts with hugepage utilization over 75% (less than 25% remaining)
+  - name: Show me compute servers where my hugepages are more than 75% used
+    debug:
+      var: ansible_local.hugepages
+    when: (ansible_local.hugepages.HugePages_Free |int / ansible_local.hugepages.HugePages_Total |int) * 100 < 25
