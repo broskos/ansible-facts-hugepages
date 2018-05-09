@@ -30,7 +30,7 @@
 
 # now lets use our facts to determine what we output
 # here we say only show me hosts with hugepage utilization over 75% (less than 25% remaining)
-  - name: Show me compute servers where my hugepages are more than 75% used
+  - name: Show me compute servers where my hugepages are more than 75% consumed
     debug:
       var: ansible_local.hugepages
     when: (ansible_local.hugepages.HugePages_Free |int / ansible_local.hugepages.HugePages_Total |int) * 100 < 25
