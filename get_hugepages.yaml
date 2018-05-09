@@ -18,7 +18,7 @@
       mode: 0755
 
 
-# now lets create another play to fetch our facts, limited to just this new module
+# now lets create another play to fetch our facts
 
 - hosts: compute
   tasks:
